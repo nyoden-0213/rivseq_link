@@ -1,0 +1,13 @@
+name,parent channel,linkID,objective,"type (perennial=1,nonperennial=0)",designed head discharge (cusec),Authorized tail discharge (cusec),average transfer(bcm/yr),gross command area,cultural command area,distance (miles),authorized tail gauge (ft),completion year,ori_lon,ori_lat,des_lon,des_lat
+ChashmaJhelumLink,,1,-999,-999,21700,-999,-999,-999,-999,64,-999,1971,71.25,32.25,72.222447,31.968122
+TaunsaPunjnadLink,taunsaB,2,-999,0,12000,-999,12.58,2150000,2000000,38,-999,1959,70.849756,30.512637,71.367363,30.270706
+UpperJhelumLink,,3,-999,-999,-999,-999,11.04,-999,-999,-999,-999,-999,-999,-999,-999,-999
+RasulQadirabadLink,rasulB,4,-999,1,19000,19000,16.96,0,0,29,0,1967,73.518151,32.682474,73.65,32.34
+TrimmuSidhnaiLink,trimmuH,5,-999,1,12500,10000,9.80,0,0,43,12,1965,72.146489,31.144746,72.1569877,30.5715824
+QadirabadBallokiLink,qadiraB,6,-999,1,25000,20900,16.61,-999,-999,79,-999,1967,73.684301,32.34,73.858646,31.223485
+MaralaRaviLink,maralaB,7,-999,0,22000,20000,1.23,165598,154987,63,-999,1956,74.465037,32.672466,74.619672,31.897072
+UpperChenabLink,,8,-999,-999,-999,-999,14.57,-999,-999,-999,-999,-999,74.465037,32.672466,73.858646,31.223485
+SidhnaiMailsiBhawalLink,sidhnaiB,9,-999,1,11300,4000,9.01,0,0,74,0,1965,72.1569877,30.5715824,72.247531,29.727172
+BRBDLink,MainLineUpper,10,-999,1,7260,2380,6.18,-999,-999,107,-999,-999,-999,-999,-999,-999
+B-SLink,,11,-999,1,24500,-999,13.25,-999,-999,53,8.6,1951,73.858646,31.223485,73.866315,30.377698
+B-SLink2,,12,-999,1,9000,9000,11.98,-999,-999,38,6.8,-999,-999,-999,-999,-999
