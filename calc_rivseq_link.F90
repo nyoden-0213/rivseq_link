@@ -8,7 +8,7 @@
       data                    type /'bin'/
 ! input files
       character*256       ::  diminfo                 !! dimention info file
-      data                    diminfo /'../diminfo_test-1deg.txt'/
+      data                    diminfo /'testdata/diminfo_test-1deg.txt'/
 ! dimention
       integer             ::  ix, iy, jx, jy
       integer             ::  nx, ny                  !! river map dimention
@@ -28,16 +28,12 @@
 ! variables
       real,allocatable    ::  rivseqmod(:,:)
       real,allocatable    ::  rivseqmod2(:)
-      integer,allocatable    ::  test(:,:)
-      integer,allocatable    ::  rivnum(:,:)
 ! files
       character*256       ::  cnextxy        !! river network map, grid area
       integer             ::  ios
       character*256       ::  cinpmat                 !! input matrix
       character*256       ::  crivseqmod                 !! river sequence
-      parameter              (crivseqmod='../rivseqmod.bin')
-      character*256       ::  ctest                !! river sequence
-      parameter              (ctest='../test.bin')
+      parameter              (crivseqmod='testdata/rivseqmod.bin')
 ! undef
       integer             ::  imis                !! integer undefined
 ! value
@@ -53,11 +49,8 @@
       integer             ::  m0rec
       parameter              (m0rec=5)
       character*256       ::  ccanalinfo              !!canal info
-      parameter              (ccanalinfo='/cluster/data7/nyoden/H08_20210301/cpl/bin/canal_info.csv')
-      character*256       ::  crivnum              !!river ID
-      parameter              (crivnum='/cluster/data7/nyoden/H08_20210301/map/out/riv_num_/rivnum.CMF.in5')
+      parameter              (ccanalinfo='testdata/canal_info.csv')
       character*256       ::  dummy
-      integer             ::  count
 ! ================================================
       print *, 'CALC_OUTCLM - calculate annual mean discharge from runoff climatology'
       print *, 'calc_outclm: read parameters from arguments'
@@ -106,14 +99,10 @@
       enddo
 ! =========
       print *, 'calc_outclm: read nextxy.bin'
-      cnextxy='../nextxy.bin'
+      cnextxy='testdata/nextxy.bin'
       open(11,file=cnextxy,form='unformatted',access='direct',recl=4*nx*ny,status='old',iostat=ios)
       read(11,rec=1) nextx
       read(11,rec=2) nexty
-      close(11)
-
-      open(11,file=crivnum,form='unformatted',access='direct',recl=4*nx*ny,status='old',iostat=ios)
-      read(11,rec=1) rivnum
       close(11)
 ! ==========
 ! read link canal info
@@ -137,13 +126,12 @@
       close (15) 
 ! ==========
       print *, 'calc_outclm: calculate river sequence'
-      allocate(upst(nx,ny),upnow(nx,ny),xseq(nx*ny),yseq(nx*ny),rivseqmod(nx,ny),rivseqmod2(nx*ny),test(nx,ny),rivnum(nx,ny))
+      allocate(upst(nx,ny),upnow(nx,ny),xseq(nx*ny),yseq(nx*ny),rivseqmod(nx,ny),rivseqmod2(nx*ny))
       upst(:,:)=0
       upnow(:,:)=0
       xseq(:)=-9999
       yseq(:)=-9999
       rivseqmod(:,:)=0
-      test(:,:)=0
 ! count number of upstreams
       do iy=1, ny
         do ix=1, nx
@@ -182,24 +170,19 @@
 
 ! find the next downstream, register to xseq & yseq when upst=upnow
       print *, 'main calculation'
-      count=0
       again=1
       do while( again==1 )
-        count=count+1
         again=0
         jseq=nseqnow
         do iseq=nseqpre+1, nseqnow          
           ix=xseq(iseq)
-          iy=yseq(iseq)
-          test(ix,iy)=1      
+          iy=yseq(iseq)    
           if( nextx(ix,iy)>0 )then
-            test(ix,iy)=2
             jx=nextx(ix,iy)
             jy=nexty(ix,iy)
             upnow(jx,jy)=upnow(jx,jy)+1
             rivseqmod(jx,jy)=max(rivseqmod(jx,jy),rivseqmod(ix,iy)+1)
             if( upnow(jx,jy)==upst(jx,jy) )then  !! if all upstream are registered, then target downstream can be registered
-              test(ix,iy)=3
               again=1
               jseq=jseq+1
               xseq(jseq)=jx
@@ -226,24 +209,6 @@
         nseqpre=nseqnow
         nseqnow=jseq
       end do
-      print *, 'rivseqmod', rivseqmod(103, 64)
-      print *, 'count', count, jseq
-      do i=1, jseq
-        if(xseq(jseq)==103.and.yseq(jseq)==64)then
-          print *, 'correctly listed!'
-        end if
-      end do
-
-! debug
-!      count=0
-!      do iy=1, ny
-!        do ix=1, nx
-!          if(rivseqmod(ix,iy)/=rivseq(ix,iy))then
-!            count=count+1
-!          endif
-!        end do
-!      end do
-!      print *, count, '0 is fine'
 
       do iy=1, ny
         do ix=1, nx
@@ -274,10 +239,6 @@
       end do
       open(11,file=crivseqmod,form='unformatted',access='direct',recl=4*nx*ny)
       write(11,rec=1) rivseqmod2
-      close(11)
-! write debug files
-      open(11,file=ctest,form='unformatted',access='direct',recl=4*nx*ny)
-      write(11,rec=1) test
       close(11)
 !!================================================
       end program calc_rivseq_link
